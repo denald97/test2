@@ -7,9 +7,9 @@ export class RolesService {
   
     async createRole(data: CreateRoleDTO) {}
   
-    async getRole() {id: string}
+    async getRole(id: string) {}
   
-    async editRole() {id: string, data: EditRoleDTO}
+    async editRole(id: string, data: EditRoleDTO) {}
   
-    async deleteRole() {id: string}
+    async deleteRole(id: string) {}
   }

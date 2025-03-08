@@ -5,10 +5,14 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.model';
 import { Role } from './roles/roles.model';
+import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
   imports: [UsersModule, RolesModule, AuthModule,
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
