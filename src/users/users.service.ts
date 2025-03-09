@@ -11,10 +11,25 @@ export class UsersService {
         private usersRepository: Repository<User>,
       ) {}
 
-      async getUsers() {}
+      async getUsers() {
+        const users = await this.usersRepository.find();
+ 
+        const result = users.map((user) => {
+          const { password, ...data } = user;
+          return data;
+        });
+    
+        return result;
+      }
 
-      async getUser(username: string) {
+      async getUser(username: string, withPassword?: boolean) {
         const user = await this.usersRepository.findOne({ where: { username } });
+    
+        if (user && !withPassword) {
+          // @ts-ignore
+          delete user["password"];
+        }
+    
         return user;
       }
   
@@ -25,9 +40,5 @@ export class UsersService {
   
     async unbanUser(username: string) {}
 
-    async addUser(data: AddUserDTO) {
-        const newUser = this.usersRepository.create(data);
-        const result = await this.usersRepository.save(newUser);
-        return result;
-      }
+    
   }

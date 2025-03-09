@@ -15,7 +15,7 @@ export class AuthService {
         private jwtService: JwtService,
       ) {}
       async login(data: LoginAuthDTO) {
-        const user = await this.usersService.getUser(data.username);
+        const user = await this.usersService.getUser(data.username, true);
         if (!user) {
           throw new UnauthorizedException('Пользователь не найден');
         }
@@ -26,7 +26,7 @@ export class AuthService {
           throw new UnauthorizedException('Неверный пароль');
         }
     
-        const payload = { sub: user.username };
+        const payload = { sub: user.username, roles: ["ADMIN"] };
         const access_token = await this.jwtService.signAsync(payload);
     
         return {

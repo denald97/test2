@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.model';
 import { Role } from './roles/roles.model';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
@@ -23,6 +24,14 @@ import { ConfigModule } from '@nestjs/config';
       entities: [User, Role],
       synchronize: true,
       logging: true,
+    }),
+    JwtModule.registerAsync({
+      global: true,
+      useFactory: async () => ({
+        global: true,
+        secret: process.env.JWT_SECRET,
+        signOptions: { expiresIn: '15m' },
+      }),
     }),
   ],
   controllers: [],
