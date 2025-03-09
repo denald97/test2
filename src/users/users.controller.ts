@@ -4,21 +4,16 @@ import { Body,
     Get,
     Param,
     Post,
-    Put, 
-    UseGuards } from '@nestjs/common';
+    Put, Query } from '@nestjs/common';
  import { UsersService } from './users.service';
- import { EditUserDTO } from './dto/create-user.dto';
- import { AuthGuard } from 'src/guards/auth.guards';
- import { HasRoles } from 'src/decorators/roles.decorator';
- import { Role } from 'src/const/roles.enum';
- import { RolesGuard } from 'src/guards/roles.guards';
+ import { EditUserDTO, AddUserDTO } from './dto/create-user.dto';
+ 
  
  @Controller('users')
  export class UsersController {
     constructor(private readonly usersService: UsersService) {}
   
-    @UseGuards(AuthGuard, RolesGuard)
-    @HasRoles(Role.Admin)
+
     @Get('')
     async getUsers() {
       return await this.usersService.getUsers();
@@ -28,6 +23,11 @@ import { Body,
    async getUser(@Param() params: { username: string }) {
      return await this.usersService.getUser(params.username);
    }
+
+   @Post('')
+     async addUser(@Body() body: AddUserDTO) {
+       return await this.usersService.addUser(body);
+     }
   
    @Put(':username')
    async editUser(
@@ -46,4 +46,12 @@ import { Body,
    async unbanUser(@Param() params: { username: string }) {
      return await this.usersService.unbanUser(params.username);
    }
+
+   @Post(':username/roles')
+  async addRoleUser(
+    @Param() params: { username: string },
+    @Query('id') roles: string,
+  ) {
+    return await this.usersService.addRoleUser(params.username, roles);
+  }
  }

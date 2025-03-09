@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { SignupAuthDTO } from 'src/auth/dto/auth.dto';
 
 export class BaseUserDTO {

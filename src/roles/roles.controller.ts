@@ -7,16 +7,7 @@ import {
     Post,
     Put,
   } from '@nestjs/common';
-  import {
-    ApiBadRequestResponse,
-    ApiBody,
-    ApiConsumes,
-    ApiCreatedResponse,
-    ApiForbiddenResponse,
-    ApiOkResponse,
-    ApiOperation,
-    ApiParam,
-  } from '@nestjs/swagger';
+  
   import { CreateRoleDTO, EditRoleDTO } from './dto/roles.dto';
 
  import { RolesService } from './roles.service';
@@ -36,11 +27,11 @@ import {
       }
   
     @Get(':id')
-    async getRole(@Param() params: { id: string }) {
+    async getRole(@Param() params: { id: number }) {
         return await this.rolesService.getRole(params.id);
       }
     @Put(':id')
-    async editRole(@Param() params: { id: string }, @Body() body: EditRoleDTO) {
+    async editRole(@Param() params: { id: number }, @Body() body: EditRoleDTO) {
         return await this.rolesService.editRole(params.id, body);
       }
   

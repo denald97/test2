@@ -1,14 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
  import { AuthService } from './auth.service';
  import { IntrospectAuthDTO, LoginAuthDTO, SignupAuthDTO } from './dto/auth.dto';
- import {
-   ApiBadRequestResponse,
-   ApiBody,
-   ApiConsumes,
-   ApiForbiddenResponse,
-   ApiOkResponse,
-   ApiOperation,
- } from '@nestjs/swagger';
  
  @Controller('auth')
  export class AuthController {

@@ -16,6 +16,7 @@ export class UsersService {
     private rolesService: RolesService,
   ) {}
 
+
   async addUser(data: AddUserDTO) {
     
     const newUser = this.usersRepository.create({
@@ -81,6 +82,30 @@ export class UsersService {
           }
         }
       }
-
+      
+      async addRoleUser(username: string, roles: string) {
+        const user = await this.getUser(username);
+        const rolesArr = roles.split(',').map((id) => ({ id: Number(id) }));
+    
+        if (user && rolesArr.length) {
+          const rolesFromDb = await Promise.all(
+            rolesArr.map(async (userRole) => {
+              return await this.rolesService.getRole(userRole.id);
+            }),
+          );
+    
+          if (rolesFromDb.length) {
+            const result = await Promise.all(
+              rolesFromDb.map(async (role) => {
+                if (role) {
+                  return await this.usersRolesRepository.save({ role, user });
+                }
+              }),
+            );
+    
+            return { message: 'Роли пользователю добавлены' };
+          }
+        }
+      }
     
   }
