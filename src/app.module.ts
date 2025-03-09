@@ -4,17 +4,19 @@ import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.model';
-import { Role } from './roles/roles.model';
+import { Role, UsersRoles } from './roles/roles.model';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { BooksService } from './books/books.service';
 import { BooksModule } from './books/books.module';
 import { CategoriesController } from './categories/categories.controller';
 import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/categories.model';
+import { Book } from './books/books.model';
 
 
 @Module({
-  imports: [UsersModule, RolesModule, AuthModule,
+  imports: [UsersModule, RolesModule, AuthModule, CategoriesModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
@@ -25,7 +27,7 @@ import { CategoriesModule } from './categories/categories.module';
       username: 'root',
       password: 'root',
       database: 'library',
-      entities: [User, Role],
+      entities: [User, Role, UsersRoles, Category, Book],
       synchronize: true,
       logging: true,
     }),
@@ -40,7 +42,7 @@ import { CategoriesModule } from './categories/categories.module';
     BooksModule,
     CategoriesModule,
   ],
-  controllers: [CategoriesController],
-  providers: [BooksService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

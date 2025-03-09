@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Category } from 'src/categories/categories.model';
 
 @Entity({ name: 'books' })
-export class User {
+export class Book {
   @ApiProperty({
     description: 'ID',
     example: 1,

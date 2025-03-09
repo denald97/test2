@@ -3,13 +3,28 @@ import { AddUserDTO, EditUserDTO } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.model';
 import { Repository } from 'typeorm';
+import { RolesService } from 'src/roles/roles.service';
+import { UsersRoles } from 'src/roles/roles.model';
  
  @Injectable()
 export class UsersService {
-    constructor(
-        @InjectRepository(User)
-        private usersRepository: Repository<User>,
-      ) {}
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    @InjectRepository(UsersRoles)
+    private usersRolesRepository: Repository<UsersRoles>,
+    private rolesService: RolesService,
+  ) {}
+
+  async addUser(data: AddUserDTO) {
+    
+    const newUser = this.usersRepository.create({
+      ...data,
+      
+    });
+    const result = await this.usersRepository.save(newUser);
+    return result;
+  }
 
       async getUsers() {
         const users = await this.usersRepository.find();
@@ -34,11 +49,38 @@ export class UsersService {
       }
   
   
-    async editUser(username: string, data: EditUserDTO) {}
+      async editUser(username: string, data: EditUserDTO) {
+        const user = await this.getUser(username);
+        if (user) {
+          const update = await this.usersRepository.update(user, {
+            ...data,
+          });
+          if (update) {
+            const editedUser = await this.getUser(username);
+            return editedUser;
+          }
+        }
+      }
   
-    async banUser(username: string) {}
+      async banUser(username: string) {
+        const user = await this.getUser(username);
+        if (user) {
+          const update = await this.usersRepository.update(user, { banned: true });
+          if (update.affected) {
+            return { message: 'Пользователь заблокирован' };
+          }
+        }
+      }
   
-    async unbanUser(username: string) {}
+      async unbanUser(username: string) {
+        const user = await this.getUser(username);
+        if (user) {
+          const update = await this.usersRepository.update(user, { banned: false });
+          if (update.affected) {
+            return { message: 'Пользователь разблокирован' };
+          }
+        }
+      }
 
     
   }
