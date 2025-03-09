@@ -7,6 +7,10 @@ import { User } from './users/users.model';
 import { Role } from './roles/roles.model';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { BooksService } from './books/books.service';
+import { BooksModule } from './books/books.module';
+import { CategoriesController } from './categories/categories.controller';
+import { CategoriesModule } from './categories/categories.module';
 
 
 @Module({
@@ -33,8 +37,10 @@ import { JwtModule } from '@nestjs/jwt';
         signOptions: { expiresIn: '15m' },
       }),
     }),
+    BooksModule,
+    CategoriesModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [CategoriesController],
+  providers: [BooksService],
 })
 export class AppModule {}

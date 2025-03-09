@@ -1,11 +1,12 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-    UpdateDateColumn,
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
   } from 'typeorm';
   import { ApiProperty } from '@nestjs/swagger';
+  import { User } from 'src/users/users.model';
   
   @Entity({ name: 'roles' })
   export class Role {
@@ -29,10 +30,19 @@ import {
     })
     @Column()
     name: string;
-  
-    @CreateDateColumn({ nullable: true })
-    createdAt?: Date;
-  
-    @UpdateDateColumn({ nullable: true })
-    updatedAt?: Date;
+
   }
+
+  @Entity('users_roles')
+export class UsersRoles {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => User, { eager: true })
+  @JoinColumn()
+  user: User;
+
+  @ManyToOne(() => Role, { eager: true })
+  @JoinColumn()
+  role: Role;
+}
